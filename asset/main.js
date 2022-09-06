@@ -197,11 +197,17 @@ function risoluzioneSemplice(array){
         
     }
 
+    function sommaArray(total, num) {
+        return total + num;
+    }
 
+    let semplificazione = array.reduce(sommaArray);
     
 
-    return array;
+    return semplificazione;
 }
+
+
 
 let arrayProva = ["√", 25, "-", 5, "^", 3 ];
 console.log(arrayProva)
