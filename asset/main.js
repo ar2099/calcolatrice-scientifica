@@ -106,11 +106,60 @@ function risoluzioneSemplice(array){
     array = memoriaTransitoria;
     memoriaTransitoria = [];
 
+
+    //semplificazione - e + finita
+
+    //ANCHOR MOLTIPLICAZIONI E DIVISIONI
+
+    //lo stato ci servirà per il ciclo while
+    let stato2 = false;
+
+    //questo ci servirà per evitare bug se non ci fossero * o :
+    if ((array.some((element) => element == "*") == false) && (array.some((element) => element == ":") == false)) {
+        stato2 = true;
+    } 
+
+    //ecco il ciclo vero e proprio
+    while(stato2 == false){
+        let trovatoreMoltiplicazione = array.indexOf("*");
+        let trovatoreDivisioni = array.indexOf(":");
+        let trovatore;
+        if((trovatoreMoltiplicazione < trovatoreDivisioni) && ( trovatoreMoltiplicazione != -1)){
+            trovatore = trovatoreMoltiplicazione;
+           array[trovatore] = array[trovatore - 1] * array[trovatore + 1];
+            array[trovatore - 1] = "rifiuto";
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatoreMoltiplicazione > trovatoreDivisioni) && (trovatoreDivisioni == -1)){
+            trovatore = trovatoreMoltiplicazione;
+            array[trovatore] = array[trovatore - 1] * array[trovatore + 1];
+            array[trovatore - 1] = "rifiuto";
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatoreMoltiplicazione > trovatoreDivisioni) && (trovatoreDivisioni != -1)) {
+            trovatore = trovatoreDivisioni;
+            array[trovatore] = array[trovatore - 1] / array[trovatore + 1];
+            array[trovatore - 1] = "rifiuto";
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatoreMoltiplicazione < trovatoreDivisioni) && (trovatoreMoltiplicazione == -1)) {
+            trovatore = trovatoreDivisioni;
+            array[trovatore] = array[trovatore - 1] / array[trovatore + 1];
+            array[trovatore - 1] = "rifiuto";
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatoreMoltiplicazione == -1) && (trovatoreDivisioni == -1)){
+            stato2 = true
+        }
+        memoriaTransitoria = array.filter(valore => valore != "rifiuto");
+        array = memoriaTransitoria;
+        memoriaTransitoria = [];
+
+        
+    }
+
+
     
 
     return array;
 }
 
-let arrayProva = [10,"-", "-", "-",  "-", ":", "-", 5, "+", "-", "*", 7];
+let arrayProva = [10, "*", 5, "*", "-", 0.5, "-", "-", "-", ":", 5, "-", 10];
 console.log(arrayProva)
 console.log(risoluzioneSemplice(arrayProva))
