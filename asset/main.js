@@ -19,6 +19,49 @@ function risoluzioneSemplice(array){
     //svolte per poi farla coincidere con l'array originale
     let memoriaTransitoria;
 
+    //ANCHOR POTENZA E RADICE
+
+    //lo stato ci servirà per il ciclo while
+    let stato3 = false;
+
+    //questo ci servirà per evitare bug se non ci fossero * o :
+    if ((array.some((element) => element == "^") == false) && (array.some((element) => element == "√") == false)) {
+        stato3 = true;
+    }
+
+    //ecco il ciclo vero e proprio
+    while (stato3 == false) {
+        let trovatorePotenza = array.indexOf("^");
+        let trovatoreRadice = array.indexOf("√");
+        let trovatore;
+        if ((trovatorePotenza < trovatoreRadice) && (trovatorePotenza != -1)) {
+            trovatore = trovatorePotenza;
+            array[trovatore] = array[trovatore - 1] ** array[trovatore + 1];
+            array[trovatore - 1] = "rifiuto";
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatorePotenza > trovatoreRadice) && (trovatoreRadice == -1)) {
+            trovatore = trovatorePotenza;
+            array[trovatore] = array[trovatore - 1] ** array[trovatore + 1];
+            array[trovatore - 1] = "rifiuto";
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatorePotenza > trovatoreRadice) && (trovatoreRadice != -1)) {
+            trovatore = trovatoreRadice;
+            array[trovatore] = Math.sqrt(array[trovatore + 1]) ;
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatorePotenza < trovatoreRadice) && (trovatorePotenza == -1)) {
+            trovatore = trovatoreRadice;
+            array[trovatore] = Math.sqrt(array[trovatore + 1]);
+            array[trovatore + 1] = "rifiuto";
+        } else if ((trovatorePotenza == -1) && (trovatoreRadice == -1)) {
+            stato3 = true
+        }
+        memoriaTransitoria = array.filter(valore => valore != "rifiuto");
+        array = memoriaTransitoria;
+        memoriaTransitoria = [];
+
+
+    }
+
     // ANCHOR somma - e +
     //prima semplificazione
 
@@ -160,6 +203,6 @@ function risoluzioneSemplice(array){
     return array;
 }
 
-let arrayProva = [10, "*", 5, "*", "-", 0.5, "-", "-", "-", ":", 5, "-", 10];
+let arrayProva = ["√", 25, "-", 5, "^", 3 ];
 console.log(arrayProva)
 console.log(risoluzioneSemplice(arrayProva))
