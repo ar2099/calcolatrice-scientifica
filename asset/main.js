@@ -19,6 +19,9 @@ function risoluzioneSemplice(array){
     //svolte per poi farla coincidere con l'array originale
     let memoriaTransitoria;
 
+    //array partenza
+    // console.log("array partenza")
+    // console.log(array);
     //ANCHOR POTENZA E RADICE
 
     //lo stato ci servirà per il ciclo while
@@ -61,7 +64,9 @@ function risoluzioneSemplice(array){
 
 
     }
-
+    //dopo potenza e radice
+    // console.log("dopo potenza e radice");
+    // console.log(array)
     // ANCHOR somma - e +
     //prima semplificazione
 
@@ -69,35 +74,34 @@ function risoluzioneSemplice(array){
     let stato1 = false;
 
     //questo ci servirà per evitare bug se non ci fossero + o -
-    if (array.some((element) => element == "+") == false) {
+    if ((array.some((element) => element == "+") == false) && (array.some((element) => element == "-") == false)) {
         stato1 = true;
-    } else if (array.some((element) => element == "-") == false) {
-        stato1 = true;
-    }
+    } 
 
     //il ciclo vero e proprio della prima semplificazione
     while(stato1 == false){
         for (i = 0; i < array.length; i++) {
-            if (array[i] == "-" && array[i + 1] == "-") {
+            if ((array[i] == "-") && (array[i + 1] == "-")) {
                 array[i] = "+";
                 array[i + 1] = "rifiuto"
-            } else if ((array[i] == "-" || array[i] == "+") && (array[i + 1] == "+")) {
+            } else if (((array[i] == "-") ||( array[i] == "+")) && (array[i + 1] == "+")) {
                 array[i + 1] = "rifiuto"
-            } else if ((array[i + 1] == "-" || array[i + 1] == "+") && (array[i] == "+")) {
+            } else if (((array[i + 1] == "-") ||( array[i + 1] == "+")) && (array[i] == "+")) {
                 array[i] = "rifiuto"
             }
             
         }
-        if (array.some((element) => element == "rifiuto") != true) {
+        if (array.some((element) => element == "rifiuto") == false) {
             stato1 = true;
         } else {
             memoriaTransitoria = array.filter(valore => valore != "rifiuto");
+            
             array = memoriaTransitoria;
             memoriaTransitoria = [];
         }
     }
     
-   
+    
 
     //FUNZIONA
     //ora dobbiamo fare un ulteriore filtraggio:
@@ -150,6 +154,10 @@ function risoluzioneSemplice(array){
     memoriaTransitoria = [];
 
 
+    //semplificazione
+    // console.log("semplificazione");
+    // console.log(array)
+
     //semplificazione - e + finita
 
     //ANCHOR MOLTIPLICAZIONI E DIVISIONI
@@ -197,18 +205,58 @@ function risoluzioneSemplice(array){
         
     }
 
+    // //moltiplicazioni e divisioni
+    // console.log("moltiplicazioni e divisioni");
+    // console.log(array)
+
     function sommaArray(total, num) {
         return total + num;
     }
 
-    let semplificazione = array.reduce(sommaArray);
+    array = array.reduce(sommaArray);
     
+    // //somma
+    // console.log("somma");
+    // console.log(array)
 
-    return semplificazione;
+    return array;
+}
+
+//ANCHOR PARENTESI (non funziona)
+function risoluzioneComplessa(array){
+    if (array.some((element) => element == "(") == false){
+        let risposta = risoluzioneSemplice(array);
+        array = risposta;
+        console.log("risposta " + array)
+        return array;
+    } else {
+        while (array.some((element) => element == "(") == true){
+            let aperturaParentesi = array.lastIndexOf("(");
+            let chiusuraParentesi = array.indexOf(")", aperturaParentesi);
+            let arrayTransitoria = array;
+            arrayTransitoria = arrayTransitoria.slice(aperturaParentesi + 1, chiusuraParentesi);
+
+            let arrayTransitoria2 = risoluzioneSemplice(arrayTransitoria);
+
+            array.splice(aperturaParentesi, chiusuraParentesi - aperturaParentesi + 1, arrayTransitoria2);
+            console.log("fine parentesi")
+            console.log(array)
+        }
+            
+        
+       let risposta =  risoluzioneSemplice(array);
+       array = risposta;
+       console.log("risposta " + array)
+       return array;
+
+    }
 }
 
 
 
-let arrayProva = ["√", 25, "-", 5, "^", 3 ];
-console.log(arrayProva)
-console.log(risoluzioneSemplice(arrayProva))
+let arrayProva = ["-", "-", 3, "*", 5, "^", 2, "-", "√", 9]
+ 
+// risoluzioneSemplice(arrayProva);
+
+let arrayProva2 = ["(", 5, "-", 3, ")", "^", "(", "-", "-", 3, ")", "-", "√", "(", 7, "+", 3, "-", 3, "^", "(", 2, ")", ")"];
+ risoluzioneComplessa(arrayProva2);
