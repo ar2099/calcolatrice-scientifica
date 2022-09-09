@@ -16,6 +16,10 @@ let memoriaLunga = [];
 //il numero che stiamo attualmente digitando
 let memoriaBreve = "";
 
+//creiamo ora una variabile per la moltiplicazione e 
+//la divisione (spiegazione più avanti)
+let statoOperatore1 = false
+
 //creiamo ora una funzione
 //per prendere il valore di un tasto-numero
 //quando cliccato
@@ -26,7 +30,8 @@ function digitNumber(item) {
 
         schermo.innerText += item.innerText;
         memoriaBreve = memoriaBreve + item.innerText;
-
+        //spiegazione più avanti
+        statoOperatore1 = true;
             // console.log( "valore cliccato: " + item.innerText)
             // console.log("valore memoria breve: " + memoriaBreve)
     });
@@ -36,6 +41,8 @@ function digitNumber(item) {
 //a tutti i tasti
 
 tuttiNumeri.forEach(digitNumber);
+
+
 
 //creiamo ora una variabile booleana
 //per il punto e la funzione per aggiungerlo. 
@@ -61,7 +68,9 @@ punto.addEventListener("click", function () {
 
         schermo.innerText += "0" + punto.innerText;
         memoriaBreve = memoriaBreve + "0" + punto.innerText;
-        statoPunto = false
+        statoPunto = false;
+        //spiegazione più avanti
+        statoOperatore1 = true
         // console.log("valore cliccato: " + punto.innerText)
         // console.log("valore memoria breve: " + memoriaBreve)
 
@@ -87,7 +96,11 @@ function digitSomma(item) {
 
         schermo.innerText += item.innerText;
         //pushiamo il valore convertito nell'array
-        memoriaLunga.push(Number(memoriaBreve));
+        //se esiste
+        if(memoriaBreve !== ""){
+            memoriaLunga.push(Number(memoriaBreve));
+        }
+       
         //pushiamo l'operatore nell'array
         memoriaLunga.push(item.innerText);
 
@@ -107,3 +120,107 @@ function digitSomma(item) {
 //a tutti i tasti
 
 somma.forEach(digitSomma);
+
+// costante per selezionare  gli operatori * e :
+
+const operatore1 = document.querySelectorAll(".operatore1");
+
+//quello che facciamo ora è far si che
+//ogni volta che viene cliccato * e :
+//il numero creato nella memoria breve venga messo
+//in un array più l'operazione eseguita
+//attenzione: bisogna anche convertirlo da stringa a numero
+
+function digitOperatore1(item) {
+
+    item.addEventListener("click", function () {
+
+        //ora usiamo lo statoOperatore1
+        //è impostato su falso inizialmente,
+        //in maniera che non si possa iniziare
+        //l'operazione con una moltiplicazione
+        //o divisione, e diventa vero
+        //quando c'è un numero nell'array
+        if(statoOperatore1 == false){
+            alert("errore di digitazione. Digita prima un numero")
+        } else if (statoOperatore1 == true) {
+            schermo.innerText += item.innerText;
+            //pushiamo il valore convertito nell'array
+            memoriaLunga.push(Number(memoriaBreve));
+            //pushiamo l'operatore nell'array
+            memoriaLunga.push(item.innerText);
+
+            //puliamo la memoria breve
+            memoriaBreve = "";
+
+            //cambiamo lo stato del punto
+            statoPunto = true;
+
+            //cambiamo lo stato del operatore1
+            //in maniera che non si possa mettere due moltipli
+            //o divi di fila
+            statoOperatore1 = false;
+
+            // console.log("valore cliccato: " + item.innerText)
+            console.log("valore memoria lunga:");
+            console.log(memoriaLunga);
+        }
+        
+    });
+}
+
+//ora usiamo il foreach per applicarla
+//a tutti i tasti
+
+operatore1.forEach(digitOperatore1);
+
+// costante per selezionare  l'operatore √
+
+const radice = document.getElementById("radice");
+
+//quello che facciamo ora è far si che
+//ogni volta che viene cliccato √
+//il numero creato nella memoria breve venga messo
+//in un array più l'operazione eseguita
+//attenzione: bisogna anche convertirlo da stringa a numero
+
+
+radice.addEventListener("click", function(){
+   
+    //Prima del click,
+    //se è stato digitato un numero
+    //se l'ultimo elemento nella memoria non è un numero
+    //se l'array memoria non è vuota
+    if ((memoriaBreve !== "") 
+    && (isNaN(memoriaLunga[memoriaLunga.length - 1]) == true) 
+    && (memoriaLunga[memoriaLunga.length - 1] != 0)){
+
+        //pushiamo il valore convertito nell'array
+        memoriaLunga.push(Number(memoriaBreve));
+        memoriaLunga.push("+");
+        memoriaLunga.push("√");
+        memoriaLunga.push("(");
+    }
+     //Prima del click,
+    //se non è stato digitato un numero
+    //se l'ultimo elemento nella memoria non è un numero
+    //se l'array memoria è vuota
+    else if ((memoriaBreve === "")
+        && (memoriaLunga.length == 0)) {
+
+        //pushiamo il valore convertito nell'array
+        memoriaLunga.push("√");
+        memoriaLunga.push("(");
+    }
+
+    
+    //puliamo la memoria breve
+    memoriaBreve = "";
+
+    //scriviamo tutto a schermo
+    schermo.innerText = (memoriaLunga.toString()).replace(/,/g, "");
+
+    
+console.log(memoriaLunga)
+    
+});
