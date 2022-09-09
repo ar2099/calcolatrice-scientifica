@@ -10,7 +10,60 @@
 </head>
 <body>
     
-
-    <script src="asset/main.js"></script>
+    <!-- è una single page application, il div containerApp è tutta la schermata -->
+    <div id="containerApp">
+    
+    
+        <div id="calcolatrice">
+    
+            <div id="display">
+                <p id="schermo"></p>
+            </div>
+    
+            <div id="container-tasti">
+    
+                <span class="tasto numero">0</span>
+                <span class="tasto numero">1</span>
+                <span class="tasto numero">2</span>
+                <span class="tasto numero">3</span>
+                <span class="tasto numero">4</span>
+                <span class="tasto numero">5</span>
+                <span class="tasto numero">6</span>
+                <span class="tasto numero">7</span>
+                <span class="tasto numero">8</span>
+                <span class="tasto numero">9</span>
+                <span class="tasto" id="punto">.</span>
+                <span class="tasto operatore">+</span>
+                <span class="tasto operatore">-</span>
+                <span class="tasto operatore">:</span>
+                <span class="tasto operatore">*</span>
+                <span class="tasto operatore">^</span>
+                <span class="tasto operatore">&#8730;</span>
+                <span class="tasto operatore" id="aperturaParentesi">(</span>
+                <span class="tasto operatore" id="chiusuraParentesi">)</span>
+    
+                <span class="tasto">Cancella tutto</span>
+                <span class="tasto">Canc1</span>
+                <span class="tasto" id="uguale">=</span>
+                <label for="apr" class="tasto">Risultato con quante cifre decimali:</label>
+                
+                <select name="approssimazione" id="apr" class="tasto">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+    
+            </div>
+    
+        </div>
+    
+    
+    
+    </div> <!-- fine container app   -->
+    <script src="asset/tasti.js"></script>
+    <script src="asset/risoluzione.js"></script>
 </body>
 </html>
