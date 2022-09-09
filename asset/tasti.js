@@ -143,27 +143,37 @@ function digitOperatore1(item) {
         //quando c'è un numero nell'array
         if(statoOperatore1 == false){
             alert("errore di digitazione. Digita prima un numero")
-        } else if (statoOperatore1 == true) {
-            schermo.innerText += item.innerText;
-            //pushiamo il valore convertito nell'array
-            memoriaLunga.push(Number(memoriaBreve));
-            //pushiamo l'operatore nell'array
-            memoriaLunga.push(item.innerText);
+        } else {
+            if((memoriaLunga[memoriaLunga.length -1] == "(")
+            && (memoriaBreve === "")){
+                alert("errore di digitazione. Digita prima un numero")
+            } else
+            {
+                schermo.innerText += item.innerText;
+                //pushiamo il valore convertito nell'array
+                if(memoriaBreve !== ""){
+                    memoriaLunga.push(Number(memoriaBreve));
+                }
+                
+                //pushiamo l'operatore nell'array
+                memoriaLunga.push(item.innerText);
 
-            //puliamo la memoria breve
-            memoriaBreve = "";
+                //puliamo la memoria breve
+                memoriaBreve = "";
 
-            //cambiamo lo stato del punto
-            statoPunto = true;
+                //cambiamo lo stato del punto
+                statoPunto = true;
 
-            //cambiamo lo stato del operatore1
-            //in maniera che non si possa mettere due moltipli
-            //o divi di fila
-            statoOperatore1 = false;
+                //cambiamo lo stato del operatore1
+                //in maniera che non si possa mettere due moltipli
+                //o divi di fila
+                statoOperatore1 = false;
 
-            // console.log("valore cliccato: " + item.innerText)
-            console.log("valore memoria lunga:");
-            console.log(memoriaLunga);
+                // console.log("valore cliccato: " + item.innerText)
+                console.log("valore memoria lunga:");
+                console.log(memoriaLunga);
+            }
+           
         }
         
     });
@@ -200,10 +210,12 @@ radice.addEventListener("click", function(){
         memoriaLunga.push("+");
         memoriaLunga.push("√");
         memoriaLunga.push("(");
+
+        //puliamo la memoria breve
+        memoriaBreve = "";
     }
      //Prima del click,
     //se non è stato digitato un numero
-    //se l'ultimo elemento nella memoria non è un numero
     //se l'array memoria è vuota
     else if ((memoriaBreve === "")
         && (memoriaLunga.length == 0)) {
@@ -211,6 +223,25 @@ radice.addEventListener("click", function(){
         //pushiamo il valore convertito nell'array
         memoriaLunga.push("√");
         memoriaLunga.push("(");
+
+        //puliamo la memoria breve
+        memoriaBreve = "";
+    }
+
+    //Prima del click,
+    //se non è stato digitato un numero
+    //se l'array memoria non è vuota
+    //se l'ultimo elemento nella memoria non è un numero
+    else if ((memoriaBreve === "") 
+        && (memoriaLunga.length != 0)
+        && (isNaN(memoriaLunga[memoriaLunga.length - 1]) == true)) {
+
+        //pushiamo il valore convertito nell'array
+        memoriaLunga.push("√");
+        memoriaLunga.push("(");
+
+        //puliamo la memoria breve
+        memoriaBreve = "";
     }
 
     
@@ -224,3 +255,64 @@ radice.addEventListener("click", function(){
 console.log(memoriaLunga)
     
 });
+
+// costante per selezionare  l'operatore ^
+
+const potenza = document.getElementById("potenza");
+
+//quello che facciamo ora è far si che
+//ogni volta che viene cliccato ^
+//il numero creato nella memoria breve venga messo
+//in un array più l'operazione eseguita
+//attenzione: bisogna anche convertirlo da stringa a numero
+
+potenza.addEventListener("click", function () {
+    //Prima del click,
+    //se non è stato digitato un numero
+    //se l'array memoria è vuota
+    if ((memoriaBreve === "")
+        && (memoriaLunga.length == 0)) {
+
+        alert("non si può iniziare con un elevamento a potenza")
+    }
+    //Prima del click,
+    //se non è stato digitato un numero
+    //se l'array memoria non è vuota
+    //se l'ultimo elemento nella memoria non è un numero
+    //se l'ultimo elemento nella memoria non è una parentesi
+    else if ((memoriaBreve === "")
+        && (memoriaLunga.length != 0)
+        && (isNaN(memoriaLunga[memoriaLunga.length - 1]) == true)
+        && (memoriaLunga[memoriaLunga.length - 1] != ")")) {
+
+        alert("la potenza deve essere attaccata a un numero o a una parentesi")
+    }
+
+    //Prima del click,
+    //se è stato digitato un numero 
+    //o
+    //una parentesi
+    else if ((memoriaBreve !== "")
+        || (memoriaLunga[memoriaLunga.length - 1] == ")")) {
+
+        if (memoriaBreve !== "") {
+            memoriaLunga.push(Number(memoriaBreve));
+        }
+        memoriaLunga.push("^")
+        memoriaLunga.push("(")
+        schermo.innerText = (memoriaLunga.toString()).replace(/,/g, "");
+        console.log(memoriaLunga)
+
+        //puliamo la memoria breve
+        memoriaBreve = "";
+    }
+
+    
+})
+
+
+// costante per selezionare  l'operatore (
+const aperturaParentesi = document.getElementById("aperturaParentesi");
+
+// costante per selezionare  l'operatore )
+const chiusuraParentesi = document.getElementById("chiusuraParentesi");
