@@ -27,13 +27,17 @@ let statoOperatore1 = false
 function digitNumber(item) {
 
     item.addEventListener("click", function () {
-
-        schermo.innerText += item.innerText;
-        memoriaBreve = memoriaBreve + item.innerText;
-        //spiegazione più avanti
-        statoOperatore1 = true;
+        if(memoriaLunga[memoriaLunga.length -1] == ")"){
+            alert("dopo la parentesi ci vuole un operatore")
+        } else {
+            schermo.innerText += item.innerText;
+            memoriaBreve = memoriaBreve + item.innerText;
+            //spiegazione più avanti
+            statoOperatore1 = true;
             // console.log( "valore cliccato: " + item.innerText)
             // console.log("valore memoria breve: " + memoriaBreve)
+        }
+        
     });
 }
 
@@ -79,6 +83,88 @@ punto.addEventListener("click", function () {
     }
 
 });
+
+//ANCHOR PARENTESI
+
+//CREIAMO ORA UNA FUNZIONE CHE FA SI
+//CHE OGNI VOLTA CHE VIENE CLICCATA
+//L'APERTURA PARENTESI
+//AGGIUNGA A UNA VARIABILE
+//UN 1, E CHE SI POSSA
+//METTERE UNA CHIUSURA PARENTESI SOLO SE
+//è MAGGIORE DI 0, E OGNI VOLTA CHE LA CLICCHI
+//DIMINUISCE DI 1
+
+let contoParentesi = 0;
+// costante per selezionare  l'operatore (
+const aperturaParentesi = document.getElementById("aperturaParentesi");
+
+//FUNZIONE
+aperturaParentesi.addEventListener("click", function(){
+    if (memoriaBreve !== "") {
+        alert("prima della parentesi serve un operatore")
+    } else {
+        schermo.innerText += "(";
+        //pushiamo il valore convertito nell'array
+        //se esiste
+        if (memoriaBreve !== "") {
+            memoriaLunga.push(Number(memoriaBreve));
+        }
+
+        //pushiamo l'operatore nell'array
+        memoriaLunga.push("(");
+
+        //puliamo la memoria breve
+        memoriaBreve = "";
+
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
+        //cambiamo lo stato del punto
+        statoPunto = true;
+    }
+    
+})
+
+//
+
+// costante per selezionare  l'operatore )
+const chiusuraParentesi = document.getElementById("chiusuraParentesi");
+
+chiusuraParentesi.addEventListener("click", function () {
+
+    if(contoParentesi > 0){
+
+        if(memoriaBreve !== ""){
+            schermo.innerText += ")";
+            //pushiamo il valore convertito nell'array
+            //se esiste
+            if (memoriaBreve !== "") {
+                memoriaLunga.push(Number(memoriaBreve));
+            }
+
+            //pushiamo l'operatore nell'array
+            memoriaLunga.push(")");
+
+            //puliamo la memoria breve
+            memoriaBreve = "";
+
+            //diminuiamo il conto parentesi
+            contoParentesi = contoParentesi - 1;
+
+            //cambiamo lo stato del punto
+            statoPunto = true;
+        } else {
+            alert("la parentesi va chiusa con un numero")
+        }
+        
+    } else {
+        alert("non ci sono parentesi aperte")
+    }
+    
+})
+
+
 
 // costante per selezionare  gli operatori + e -
 
@@ -211,6 +297,12 @@ radice.addEventListener("click", function(){
         memoriaLunga.push("√");
         memoriaLunga.push("(");
 
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
+
+        //cambiamo lo stato del punto
+        statoPunto = true;
         //puliamo la memoria breve
         memoriaBreve = "";
     }
@@ -223,9 +315,14 @@ radice.addEventListener("click", function(){
         //pushiamo il valore convertito nell'array
         memoriaLunga.push("√");
         memoriaLunga.push("(");
-
+        //cambiamo lo stato del punto
+        statoPunto = true;
         //puliamo la memoria breve
         memoriaBreve = "";
+
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
     }
 
     //Prima del click,
@@ -240,13 +337,18 @@ radice.addEventListener("click", function(){
         memoriaLunga.push("√");
         memoriaLunga.push("(");
 
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
+
+        //cambiamo lo stato del punto
+        statoPunto = true;
         //puliamo la memoria breve
         memoriaBreve = "";
     }
 
     
-    //puliamo la memoria breve
-    memoriaBreve = "";
+    
 
     //scriviamo tutto a schermo
     schermo.innerText = (memoriaLunga.toString()).replace(/,/g, "");
@@ -300,9 +402,15 @@ potenza.addEventListener("click", function () {
         }
         memoriaLunga.push("^")
         memoriaLunga.push("(")
+
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
         schermo.innerText = (memoriaLunga.toString()).replace(/,/g, "");
         console.log(memoriaLunga)
 
+        //cambiamo lo stato del punto
+        statoPunto = true;
         //puliamo la memoria breve
         memoriaBreve = "";
     }
@@ -311,8 +419,4 @@ potenza.addEventListener("click", function () {
 })
 
 
-// costante per selezionare  l'operatore (
-const aperturaParentesi = document.getElementById("aperturaParentesi");
 
-// costante per selezionare  l'operatore )
-const chiusuraParentesi = document.getElementById("chiusuraParentesi");
