@@ -29,6 +29,10 @@ function digitNumber(item) {
         if (memoriaLunga[memoriaLunga.length - 1] == ")") {
             alert("dopo la parentesi ci vuole un operatore");
         } else {
+            if(isNaN(memoriaLunga[memoriaLunga.length - 1]) == false){
+                schermo.innerText += "+";
+                memoriaLunga.push("+")
+            }
             schermo.innerText += item.innerText;
             memoriaBreve = memoriaBreve + item.innerText;
             //spiegazione più avanti
@@ -53,7 +57,7 @@ tuttiNumeri.forEach(digitNumber);
 let statoPunto = true;
 
 punto.addEventListener("click", function () {
-    if (statoPunto == true && memoriaBreve != "") {
+    if (statoPunto == true && memoriaBreve !== "") {
         schermo.innerText += punto.innerText;
         memoriaBreve = memoriaBreve + punto.innerText;
         statoPunto = false;
@@ -62,15 +66,34 @@ punto.addEventListener("click", function () {
     }
     //questo if serve se non è ancora stato digitato nessun numero
     //e cosi aggiunge uno 0
-    else if (statoPunto == true && memoriaBreve == "") {
-        schermo.innerText += "0" + punto.innerText;
-        memoriaBreve = memoriaBreve + "0" + punto.innerText;
-        statoPunto = false;
-        //spiegazione più avanti
-        statoOperatore1 = true;
+    else if (statoPunto == true && memoriaBreve === "") {
+        //se si utilizza un risultato
+        if (
+            memoriaBreve === "" &&
+            memoriaLunga.length == 1 &&
+            isNaN(memoriaLunga[0]) == false
+        ) {
+            schermo.innerText += "+0."
+            memoriaBreve = "0" + punto.innerText;
+            memoriaLunga.push("+")
+            statoPunto = false;
+            //spiegazione più avanti
+            statoOperatore1 = true;
+            // console.log("valore cliccato: " + punto.innerText)
+            // console.log("valore memoria breve: " + memoriaBreve)
+        } else {
+            schermo.innerText += "0" + punto.innerText;
+            memoriaBreve = memoriaBreve + "0" + punto.innerText;
+            statoPunto = false;
+            //spiegazione più avanti
+            statoOperatore1 = true;
         // console.log("valore cliccato: " + punto.innerText)
         // console.log("valore memoria breve: " + memoriaBreve)
-    } else {
+        }
+       
+    } 
+    
+    else {
         alert("non ci possono essere due punti nello stesso numero");
     }
 });
@@ -217,7 +240,12 @@ function digitOperatore1(item) {
         } else {
             if (memoriaLunga[memoriaLunga.length - 1] == "(" && memoriaBreve === "") {
                 alert("errore di digitazione. Digita prima un numero");
-            } else {
+            } else if (memoriaLunga[memoriaLunga.length - 1] == "^" && memoriaBreve === "") {
+                alert("errore di digitazione. Digita prima un numero");
+            } else if (memoriaLunga[memoriaLunga.length - 1] == "√" && memoriaBreve === "") {
+                alert("errore di digitazione. Digita prima un numero");
+            } 
+            else {
                 schermo.innerText += item.innerText;
                 //pushiamo il valore convertito nell'array
                 if (memoriaBreve !== "") {
@@ -300,6 +328,24 @@ radice.addEventListener("click", function () {
         //aumentiamo il conto parentesi
         contoParentesi = contoParentesi + 1;
     }
+    //se si utilizza un risultato
+    else if (
+        memoriaBreve === "" ||
+        memoriaLunga.length == 1
+    ){
+        //pushiamo il valore convertito nell'array
+        memoriaLunga.push("+");
+        memoriaLunga.push("√");
+        memoriaLunga.push("(");
+
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
+        //cambiamo lo stato del punto
+        statoPunto = true;
+        //puliamo la memoria breve
+        memoriaBreve = "";
+    }
 
     //Prima del click,
     //se non è stato digitato un numero
@@ -374,6 +420,26 @@ potenza.addEventListener("click", function () {
         if (memoriaBreve !== "") {
             memoriaLunga.push(Number(memoriaBreve));
         }
+        memoriaLunga.push("^");
+        memoriaLunga.push("(");
+
+        //aumentiamo il conto parentesi
+        contoParentesi = contoParentesi + 1;
+
+        schermo.innerText = memoriaLunga.toString().replace(/,/g, "");
+        console.log(memoriaLunga);
+
+        //cambiamo lo stato del punto
+        statoPunto = true;
+        //puliamo la memoria breve
+        memoriaBreve = "";
+    }
+    //se si utilizza un risultato
+    else if (
+        memoriaBreve === "" ||
+        memoriaLunga.length  == 1
+    ) {
+        
         memoriaLunga.push("^");
         memoriaLunga.push("(");
 
